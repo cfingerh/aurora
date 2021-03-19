@@ -1,10 +1,6 @@
+
 mkdir ~/repositorios
 cd ~/repositorios
-
-gh repo clone cfingerh/aurora
-cd aurora
-git checkout instalacion
-cd ..
 
 gh repo clone SuperintendenciaDeCasinosCL/custom-authentication-repo
 gh repo clone SuperintendenciaDeCasinosCL/FirmaAvanzada
@@ -73,15 +69,13 @@ psql -U sgdp -d sgdp -f ~/aurora/Instalacion/sgdp_datos_inicial.sql
 
 
 
-### Compilar  integracion-client-api
-
-cd /home/ubuntu/aurora/scj/integracion-client-api
-mvn install -Dmaven.test.skip=true
-cp /home/ubuntu/aurora/scj/integracion-client-api/target/integracion-client-api-0.0.1.jar $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/lib
-cd ~
-
 # esta es solo una compilacion inicial para descargar las librerias
-cd /home/ubuntu/aurora/scj/SGDP
+### Compilar  integracion-client-api
+cd /home/ubuntu/repositorios/integracion-client-api
+mvn install -Dmaven.test.skip=true
+cp /home/ubuntu/repositorios/integracion-client-api/target/integracion-client-api-0.0.1.jar $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/lib
+cd ~
+cd /home/ubuntu/repositorios/SGDP
 mvn install -Dmaven.test.skip=true
 
 ###### Instalación de Alfresco

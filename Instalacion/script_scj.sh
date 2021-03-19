@@ -15,15 +15,20 @@ sudo apt-add-repository https://cli.github.com/packages
 sudo apt update
 sudo apt install gh
 
-mkdir repositorios
-cd repositorios
 
 gh auth login
+mkdir ~/repositorios
+cd ~/repositorios
 
 gh repo clone cfingerh/aurora
 cd aurora
 git checkout instalacion
 cd ..
+
+
+
+mkdir ~/repositorios
+cd ~/repositorios
 
 gh repo clone SuperintendenciaDeCasinosCL/custom-authentication-repo
 gh repo clone SuperintendenciaDeCasinosCL/FirmaAvanzada
@@ -92,15 +97,13 @@ psql -U sgdp -d sgdp -f ~/aurora/Instalacion/sgdp_datos_inicial.sql
 
 
 
-### Compilar  integracion-client-api
-
-cd /home/ubuntu/aurora/scj/integracion-client-api
-mvn install -Dmaven.test.skip=true
-cp /home/ubuntu/aurora/scj/integracion-client-api/target/integracion-client-api-0.0.1.jar $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/lib
-cd ~
-
 # esta es solo una compilacion inicial para descargar las librerias
-cd /home/ubuntu/aurora/scj/SGDP
+### Compilar  integracion-client-api
+cd /home/ubuntu/repositorios/integracion-client-api
+mvn install -Dmaven.test.skip=true
+cp /home/ubuntu/repositorios/integracion-client-api/target/integracion-client-api-0.0.1.jar $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/lib
+cd ~
+cd /home/ubuntu/repositorios/SGDP
 mvn install -Dmaven.test.skip=true
 
 ###### Instalación de Alfresco
@@ -145,6 +148,16 @@ $HOME_ALFRESCO/alfresco.sh start
 HOME_ALFRESCO=/home/ubuntu/alfresco
 $HOME_ALFRESCO/alfresco.sh start
 
+cd /home/ubuntu/repositorios/integracion-client-api
+mvn install -Dmaven.test.skip=true
+
+#UNA DE ESTAS DOS
+cp /home/ubuntu/repositorios/integracion-client-api/target/integracion-client-api-0.0.1.jar $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/lib
+
+cp /home/ubuntu/repositorios/integracion-client-api/integracion-client-api-0.0.2.jar $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/lib
+cd ~
+
+
 echo " 
 authentication.chain=alfinst:alfrescoNtlm,custauth1:customauthenticator,ad1:ldap-ad
 ntlm.authentication.sso.enabled=false
@@ -175,18 +188,13 @@ rm -f $HOME_ALFRESCO/alf_data/solr4/index/workspace/SpacesStore/index/*
 rm -f $HOME_ALFRESCO/alf_data/solr4/index/archive/SpacesStore/index/*
 rm -f $HOME_ALFRESCO/alf_data/solr4/model/*
 rm -rf $HOME_ALFRESCO/alf_data/solr4/content/*
-cp /home/ubuntu/aurora/scj/SGDP-DOCUMENTACION/all-in-one-repo-amp-1.0-SNAPSHOT.amp $HOME_ALFRESCO/amps
-cp /home/ubuntu/aurora/scj/SGDP-DOCUMENTACION/all-in-one-share-amp-1.0-SNAPSHOT.amp $HOME_ALFRESCO/amps
+cp /home/ubuntu/repositorios/SGDP-DOCUMENTACION/all-in-one-repo-amp-1.0-SNAPSHOT.amp $HOME_ALFRESCO/amps
+cp /home/ubuntu/repositorios/SGDP-DOCUMENTACION/all-in-one-share-amp-1.0-SNAPSHOT.amp $HOME_ALFRESCO/amps
 
 cd $HOME_ALFRESCO/bin
-# yes y | ./apply_amps.sh -force -nobackup
-$HOME_ALFRESCO/alfresco.sh stop
-$HOME_ALFRESCO/alfresco.sh start
+yes y | ./apply_amps.sh -force -nobackup
 
-cp /home/ubuntu/aurora/scj/Web-Scripts-Alfresco-SGDP/*.* $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/classes/alfresco/extension/templates/webscripts/
-$HOME_ALFRESCO/alfresco.sh stop
-$HOME_ALFRESCO/alfresco.sh start
-
+cp /home/ubuntu/repositorios/Web-Scripts-Alfresco-SGDP/*.* $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/classes/alfresco/extension/templates/webscripts/
 rm -f $HOME_ALFRESCO/alf_data/solr4/index/workspace/SpacesStore/index/*
 rm -f $HOME_ALFRESCO/alf_data/solr4/index/archive/SpacesStore/index/*
 echo http://$URL:8080/solr4/admin/cores?action=FIX 
@@ -196,8 +204,8 @@ cd $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/classes/alfresco/extension/tem
 rm -f subirCartas.post.*
 cd ~
 
-cp /home/ubuntu/aurora/scj/SGDP-DOCUMENTACION/sgdp-carpetas.xml $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/classes/alfresco/module/all-in-one-repo-amp/model/
-cp /home/ubuntu/aurora/scj/SGDP-DOCUMENTACION/sgdp-documentos.xml $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/classes/alfresco/module/all-in-one-repo-amp/model/
+cp /home/ubuntu/repositorios/SGDP-DOCUMENTACION/sgdp-carpetas.xml $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/classes/alfresco/module/all-in-one-repo-amp/model/
+cp /home/ubuntu/repositorios/SGDP-DOCUMENTACION/sgdp-documentos.xml $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/classes/alfresco/module/all-in-one-repo-amp/model/
 
 #para descomentar parte de CSRF
 sed -i '44d' $HOME_ALFRESCO/tomcat/shared/classes/alfresco/web-extension/share-config-custom.xml
@@ -353,16 +361,16 @@ sudo systemctl restart wildfly
 
 # Configurar sgdp e instalar
 
-cd /home/ubuntu/aurora/scj/integracion-client-api
+cd /home/ubuntu/repositorios/integracion-client-api
 mvn install -Dmaven.test.skip=true
 
 # Fix raro
-vim  /home/ubuntu/aurora/scj/SGDP/pom.xml
+vim  /home/ubuntu/repositorios/SGDP/pom.xml
 y cambiar client-api a version 0.0.1
 
-cd /home/ubuntu/aurora/scj/SGDP
+cd /home/ubuntu/repositorios/SGDP
 mvn clean install -Dmaven.test.skip=true
-sudo bash /opt/wildfly/bin/jboss-cli.sh --connect --controller=127.0.0.1:10000 --command="deploy --force /home/ubuntu/aurora/scj/SGDP/target/sgdp-0.0.1-SNAPSHOT.war "
+sudo bash /opt/wildfly/bin/jboss-cli.sh --connect --controller=127.0.0.1:10000 --command="deploy --force /home/ubuntu/repositorios/SGDP/target/sgdp-0.0.1-SNAPSHOT.war "
 
 sudo systemctl restart wildfly
 echo http://$URL:8090/sgdp
