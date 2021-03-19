@@ -1,0 +1,4 @@
+*.sublime-**
+env/**
+desarrollo/**
+**/variables_*.yml

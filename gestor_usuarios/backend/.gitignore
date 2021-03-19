@@ -1,0 +1,10 @@
+*.pyc
+variables.yml
+local_static/**
+.serverless/**
+conf/*_settings.py
+env**
+node_modules**
+testing/inicializar.py
+.vscode/
+callcenter/cookies.py

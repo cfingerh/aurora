@@ -1,0 +1,97 @@
+custom: 
+  wsgi:
+    app: conf.wsgi.application
+    packRequirements: false
+  pythonRequirements:
+    # dockerizePip: true
+    # dockerImage: lambci/lambda:python3.6
+    slim: true
+    layer: true
+    # strip: false
+  variables:
+    dev: ${file(./variables_development.yml)}
+    prod: ${file(./variables_production.yml)}
+  apigwBinary:
+    types:
+      - 'application/ms-excel'
+  
+  traz:
+    events:
+  dev:
+    events:
+  mobile:
+    events:
+
+service: ecologica-cliente
+# app and org for use with dashboard.serverless.com
+# app: serverless-chat
+# org: cfxxx
+
+
+provider:
+  name: aws
+  stage: ${opt:stage,'dev'}
+  region: us-west-2
+  runtime: python3
+  timeout: 120
+  memorySize: 1000
+  deploymentBucket:
+    name: analyze-deployment-bucket
+  apiGateway:
+    binaryMediaTypes:
+      - '*/*'
+
+package:
+  individually: true
+  excludeDevDependencies: false
+  exclude:
+   - "env/**"
+   - "package/**"
+   - "node_modules/**"
+   - "desarrollo/**"
+   - "static/app/**"
+   - "static/css/**"
+   - "static/font/**"
+  #  - "static/reporte_oficinas/**"
+   - "local_static/app/**"
+   - "local_static/img/**"
+   # - "app/**"
+   - "app/node_modules/**"
+   - "docs/**"
+   - "iot/sigfox_ecologica_load/**"
+   - "tracking/media/**"
+   - "*.zip"
+   - "**/*.pyc"
+   - "tests/**"
+   - "lib/**"
+   - "lambda_zappa/**"  
+   - "ecologica/*_settings.py"
+   - "*.sublime-*"
+   - "costos/static/**"
+   - "psycopg2/**"
+  #  - "*.backup"
+  #  - "*.sublime-workspace"
+
+functions:
+  principal:
+    tag:
+      Name: ecologica-clientes
+    environment: ${self:custom.variables.${self:provider.stage}}
+    # handler: handler.hello
+    handler: wsgi_handler.handler
+    layers:
+      - { Ref: PythonRequirementsLambdaLayer }
+      - arn:aws:lambda:us-west-2:192758470289:layer:Pillow:2
+      - arn:aws:lambda:us-west-2:192758470289:layer:libcairo:1
+      - arn:aws:lambda:us-west-2:192758470289:layer:matplotlib:3
+    events:
+      - http: ANY /
+      - http: ANY {proxy+}
+    package: {}  # https://github.com/serverless/serverless/issues/6752
+    
+plugins:
+  - serverless-wsgi
+  - serverless-python-requirements
+  - serverless-offline
+  - serverless-apigw-binary
+  - serverless-apigwy-binary

@@ -1,3 +1,5 @@
+desarrollo/
+*.code-workspace
 # Compiled class file
 *.class
 

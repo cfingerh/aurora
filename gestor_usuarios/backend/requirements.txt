@@ -1,0 +1,18 @@
+Django==2.2.14
+psycopg2-binary==2.8.6
+python-dateutil==2.5.0
+djangorestframework==3.9.0
+djangorestframework_simplejwt==4.6.0
+
+django-filter===2.4.0
+# djangorestframework-filters===1.0.0.dev2 
+# django-debug-toolbar==1.8
+
+django-model-utils===4.1.1
+
+PyYAML==5.3.1
+sentry-sdk==0.19.5
+django-cors-headers==3.4.0
+werkzeug
+whitenoise
+python-environ
