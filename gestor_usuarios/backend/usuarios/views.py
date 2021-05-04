@@ -39,7 +39,44 @@ def rolesunidades(request, id=None):
     return JsonResponse({})
 
 
-@csrf_exempt
+from usuarios.ldap import LDAP
+
+
+@ csrf_exempt
+def testPassword(request):
+    if request.method != 'POST':
+        return JsonResponse({'message': 'Debe ser POST'}, status=500)
+
+    data = json.loads(request.body)
+
+    try:
+        ld = LDAP(data.get("id_usuario"))
+        res = ld.testPassword(data.get("password"))
+        if res:
+            return JsonResponse({'message': 'Password correcto'})
+        return JsonResponse({'message': 'Password no corresponde'}, status=500)
+
+    except Exception as inst:
+        return JsonResponse({'message': inst.args[0]}, status=500)
+
+
+@ csrf_exempt
+def changePassword(request):
+    if request.method != 'POST':
+        return JsonResponse({'message': 'Debe ser POST'}, status=500)
+
+    data = json.loads(request.body)
+
+    try:
+        ld = LDAP(data.get("id_usuario"))
+        res = ld.changePassword(data.get("password"))
+        return JsonResponse({'message': 'Password modificado'})
+
+    except Exception as inst:
+        return JsonResponse({'message': inst.args[0]}, status=500)
+
+
+@ csrf_exempt
 def usuario(request, id_usuario=None):
     if request.method == 'PUT':
         data = json.loads(request.body)
@@ -58,16 +95,23 @@ def usuario(request, id_usuario=None):
 
 
 def get_rol_inicial():
-    return Roles.objects.all().first().id
+    item = Roles.objects.all().first()
+    if item:
+        return item.id
 
 
 def get_unidad_inicial():
-    return Unidades.objects.all().first().id
+    item = Unidades.objects.all().first()
+    if item:
+        return item.id
 
 
-@csrf_exempt
+@ csrf_exempt
 def usuarios(request):
+
     if request.method == 'POST':
+        if get_unidad_inicial() is None:
+            return JsonResponse({'message': 'No se puede crear usuario. Deben existir Unidades creadas'}, status=500)
         data = json.loads(request.body)
         usuario = {
             'id_usuario': data.get("id_usuario"),
@@ -80,6 +124,9 @@ def usuarios(request):
         }
         if UsuariosRoles.objects.filter(id_usuario=data.get("id_usuario")).first() is None:
             UsuariosRoles.objects.get_or_create(**usuario)
+
+        ld = LDAP(data.get("id_usuario"))
+        res = ld.createUsuario()
 
     usuarios = list(UsuariosRoles.objects.all().order_by('id_usuario').distinct('id_usuario').values(
         'id_usuario',

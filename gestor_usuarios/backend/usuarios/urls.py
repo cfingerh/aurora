@@ -11,6 +11,8 @@ router.register(r'api/unidades', unidades.View)
 
 urlpatterns = [
     path('api/usuarios/', views.usuarios),
+    path('api/usuarios/testPassword', views.testPassword),
+    path('api/usuarios/changePassword', views.changePassword),
     path('api/usuarios/<str:id_usuario>/', views.usuario),
     path('api/rolesunidades/<int:id>/', views.rolunidad),
     path('api/rolesunidades/', views.rolesunidades),

@@ -1,0 +1,46 @@
+Desde https://www.forticlient.com/downloads descargar la versión correspondiente de Forticlient según el sistema operativo correspondiente.
+
+ 
+
+Configurar conexión con estos datos: 
+
+ 
+
+Nombre de Conexión: Dibam Usuarios
+
+Gateway Remoto: https://200.72.159.2:443/cpd
+
+Personalizar puerto: 443
+
+Autenticación: Preguntar en el login
+
+ 
+
+Datos de usuarios:
+
+ 
+
+usuario: Natalie.Gonzalez
+clave: 2Gi46jlxj7
+
+usuario: Maria.Gallegos
+clave: cpiQZ5KcgB
+
+ 
+
+Alfresco: http://10.83.216.124:8080/share/page
+user: admin
+pass: admin123
+
+Carga de procesos: http://10.83.216.124/sgdoc
+
+SGDP: http://10.83.216.124:8180/sgdp/
+
+user: hugo
+pass: pass123
+
+user: paco
+pass: pass123
+
+user: luis
+pass: pass12

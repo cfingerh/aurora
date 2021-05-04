@@ -16,3 +16,4 @@ django-cors-headers==3.4.0
 werkzeug
 whitenoise
 python-environ
+python-ldap===3.3.1

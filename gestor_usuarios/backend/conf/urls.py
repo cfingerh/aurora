@@ -17,6 +17,7 @@ urlpatterns = [
     path('responsabilidades/', include('responsabilidades.urls')),
     path('procesos/', include('procesos.urls')),
     path('etapas/', include('etapas.urls')),
+    path('parametros/', include('parametros.urls')),
     path('docs/', include_docs_urls(title='My API title',
                                     authentication_classes=[],
                                     permission_classes=[]))

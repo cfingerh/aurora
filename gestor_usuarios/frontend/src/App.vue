@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+  <notifications position="top right"/>
     <horizontal></horizontal>
 
 <div class="container-fluid">

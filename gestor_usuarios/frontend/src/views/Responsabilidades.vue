@@ -6,7 +6,7 @@
       <div class="card-header">
         <div class="d-flex bd-highlight">
           <div class="p-2 mt-2 flex-grow-1 bd-highlight">
-            <h4 class="ficha-cliente__header">Responsabilidades (Swim Lanes</h4>
+            <h4 class="ficha-cliente__header">Responsabilidades (Swim Lanes)</h4>
           </div>
         </div>
       </div>

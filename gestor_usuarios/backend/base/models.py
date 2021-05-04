@@ -1,10 +1,4 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
+from datetime import date, datetime
 from django.db import models
 from django.db.models.fields import related
 
@@ -141,6 +135,7 @@ class CargoUsuarioRol(models.Model):
 
 
 class CategoriaDeTipoDeDocumento(models.Model):
+    """Parece que no se ocupa"""
     id_categoria_de_tipo_de_documento = models.BigAutoField(db_column='ID_CATEGORIA_DE_TIPO_DE_DOCUMENTO', primary_key=True)
     a_nombre_de_categoria_de_tipo_de_documento = models.TextField(db_column='A_NOMBRE_DE_CATEGORIA_DE_TIPO_DE_DOCUMENTO')
 
@@ -208,6 +203,7 @@ class Etapa(models.Model):
     class Meta:
         managed = False
         db_table = 'SGDP_ETAPAS'
+        ordering = ['id']
 
 
 class FechasFeriados(models.Model):
@@ -362,25 +358,25 @@ class HistoricoVinculacionExp(models.Model):
 
 
 class InstanciasDeProcesos(models.Model):
-    id_instancia_de_proceso = models.BigAutoField(db_column='ID_INSTANCIA_DE_PROCESO', primary_key=True)
-    id_proceso = models.ForeignKey('Proceso', models.DO_NOTHING, db_column='ID_PROCESO')
-    d_fecha_inicio = models.DateTimeField(db_column='D_FECHA_INICIO')
+    id = models.BigAutoField(db_column='ID_INSTANCIA_DE_PROCESO', primary_key=True)
+    proceso = models.ForeignKey('Proceso', models.DO_NOTHING, db_column='ID_PROCESO')
+    fecha_inicio = models.DateTimeField(db_column='D_FECHA_INICIO')
     d_fecha_fin = models.DateTimeField(db_column='D_FECHA_FIN', blank=True, null=True)
     a_nombre_expediente = models.CharField(db_column='A_NOMBRE_EXPEDIENTE', max_length=100, blank=True, null=True)
     d_fecha_vencimiento_usuario = models.DateTimeField(db_column='D_FECHA_VENCIMIENTO_USUARIO', blank=True, null=True)
-    id_estado_de_proceso = models.ForeignKey(EstadosDeProcesos, models.DO_NOTHING, db_column='ID_ESTADO_DE_PROCESO')
+    estado_de_proceso = models.ForeignKey(EstadosDeProcesos, models.DO_NOTHING, db_column='ID_ESTADO_DE_PROCESO')
     id_expediente = models.CharField(db_column='ID_EXPEDIENTE', max_length=100, blank=True, null=True)
     id_instancia_de_proceso_padre = models.ForeignKey('self', models.DO_NOTHING, db_column='ID_INSTANCIA_DE_PROCESO_PADRE', blank=True, null=True)
     id_usuario_inicia = models.CharField(db_column='ID_USUARIO_INICIA', max_length=30)
     id_usuario_termina = models.CharField(db_column='ID_USUARIO_TERMINA', max_length=30, blank=True, null=True)
     b_tiene_documentos_en_cms = models.BooleanField(db_column='B_TIENE_DOCUMENTOS_EN_CMS', blank=True, null=True)
     d_fecha_vencimiento = models.DateTimeField(db_column='D_FECHA_VENCIMIENTO', blank=True, null=True)
-    a_emisor = models.CharField(db_column='A_EMISOR', max_length=1000, blank=True, null=True)
+    emisor = models.CharField(db_column='A_EMISOR', max_length=1000, blank=True, null=True)
     a_asunto = models.CharField(db_column='A_ASUNTO', max_length=1000, blank=True, null=True)
-    id_unidad = models.ForeignKey('Unidades', models.DO_NOTHING, db_column='ID_UNIDAD', blank=True, null=True)
-    id_acceso = models.ForeignKey(Accesos, models.DO_NOTHING, db_column='ID_ACCESO', blank=True, null=True)
+    unidad = models.ForeignKey('Unidades', models.DO_NOTHING, db_column='ID_UNIDAD', blank=True, null=True)
+    acceso = models.ForeignKey(Accesos, models.DO_NOTHING, db_column='ID_ACCESO', blank=True, null=True)
     id_instancia_proceso_metadata = models.ForeignKey('InstanciaProcesoMetadata', models.DO_NOTHING, db_column='ID_INSTANCIA_PROCESO_METADATA', blank=True, null=True)
-    id_tipo = models.ForeignKey('Tipos', models.DO_NOTHING, db_column='ID_TIPO', blank=True, null=True)
+    tipo = models.ForeignKey('Tipos', models.DO_NOTHING, db_column='ID_TIPO', blank=True, null=True)
     d_fecha_expiracion = models.DateTimeField(db_column='D_FECHA_EXPIRACION', blank=True, null=True)
 
     class Meta:
@@ -389,18 +385,18 @@ class InstanciasDeProcesos(models.Model):
 
 
 class InstanciasDeTareas(models.Model):
-    id_instancia_de_tarea = models.BigIntegerField(db_column='ID_INSTANCIA_DE_TAREA', primary_key=True)
-    id_instancia_de_proceso = models.ForeignKey(InstanciasDeProcesos, models.DO_NOTHING, db_column='ID_INSTANCIA_DE_PROCESO')
-    id_tarea = models.ForeignKey('Tarea', models.DO_NOTHING, db_column='ID_TAREA')
-    d_fecha_asignacion = models.DateTimeField(db_column='D_FECHA_ASIGNACION')
-    d_fecha_inicio = models.DateTimeField(db_column='D_FECHA_INICIO', blank=True, null=True)
-    d_fecha_finalizacion = models.DateTimeField(db_column='D_FECHA_FINALIZACION', blank=True, null=True)
-    d_fecha_anulacion = models.DateTimeField(db_column='D_FECHA_ANULACION', blank=True, null=True)
-    a_razon_anulacion = models.CharField(db_column='A_RAZON_ANULACION', max_length=1000, blank=True, null=True)
-    d_fecha_vencimiento = models.DateTimeField(db_column='D_FECHA_VENCIMIENTO', blank=True, null=True)
-    id_estado_de_tarea = models.ForeignKey(EstadosDeTareas, models.DO_NOTHING, db_column='ID_ESTADO_DE_TAREA', blank=True, null=True)
-    d_fecha_vencimiento_usuario = models.DateTimeField(db_column='D_FECHA_VENCIMIENTO_USUARIO', blank=True, null=True)
-    id_usuario_que_asigna = models.CharField(db_column='ID_USUARIO_QUE_ASIGNA', max_length=30, blank=True, null=True)
+    id = models.BigIntegerField(db_column='ID_INSTANCIA_DE_TAREA', primary_key=True)
+    instancia_de_proceso = models.ForeignKey(InstanciasDeProcesos, models.DO_NOTHING, db_column='ID_INSTANCIA_DE_PROCESO')
+    tarea = models.ForeignKey('Tarea', models.DO_NOTHING, db_column='ID_TAREA')
+    fecha_asignacion = models.DateTimeField(db_column='D_FECHA_ASIGNACION')
+    fecha_inicio = models.DateTimeField(db_column='D_FECHA_INICIO', blank=True, null=True)
+    fecha_finalizacion = models.DateTimeField(db_column='D_FECHA_FINALIZACION', blank=True, null=True)
+    fecha_anulacion = models.DateTimeField(db_column='D_FECHA_ANULACION', blank=True, null=True)
+    razon_anulacion = models.CharField(db_column='A_RAZON_ANULACION', max_length=1000, blank=True, null=True)
+    fecha_vencimiento = models.DateTimeField(db_column='D_FECHA_VENCIMIENTO', blank=True, null=True)
+    estado_de_tarea = models.ForeignKey(EstadosDeTareas, models.DO_NOTHING, db_column='ID_ESTADO_DE_TAREA', blank=True, null=True)
+    fecha_vencimiento_usuario = models.DateTimeField(db_column='D_FECHA_VENCIMIENTO_USUARIO', blank=True, null=True)
+    usuario_que_asigna = models.CharField(db_column='ID_USUARIO_QUE_ASIGNA', max_length=30, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -511,13 +507,14 @@ class Macroproceso(models.Model):
     class Meta:
         managed = False
         db_table = 'SGDP_MACRO_PROCESOS'
+        ordering = ['nombre']
 
 
-class Parametros(models.Model):
-    id_parametro = models.BigAutoField(db_column='ID_PARAMETRO', primary_key=True)
-    a_nombre_parametro = models.CharField(db_column='A_NOMBRE_PARAMETRO', max_length=200, blank=True, null=True)
-    a_valor_parametro_char = models.CharField(db_column='A_VALOR_PARAMETRO_CHAR', max_length=10000, blank=True, null=True)
-    n_valor_parametro_numerico = models.IntegerField(db_column='N_VALOR_PARAMETRO_NUMERICO', blank=True, null=True)
+class Parametro(models.Model):
+    id = models.BigAutoField(db_column='ID_PARAMETRO', primary_key=True)
+    nombre = models.CharField(db_column='A_NOMBRE_PARAMETRO', max_length=200, blank=True, null=True)
+    valor_parametro_char = models.CharField(db_column='A_VALOR_PARAMETRO_CHAR', max_length=10000, blank=True, null=True)
+    valor_parametro_numerico = models.IntegerField(db_column='N_VALOR_PARAMETRO_NUMERICO', blank=True, null=True)
 
     class Meta:
         managed = False
@@ -553,6 +550,8 @@ class ParametroDeTarea(models.Model):
     a_nombre_param_tarea = models.CharField(db_column='A_NOMBRE_PARAM_TAREA', max_length=255)
     id_tipo_parametro_de_tarea = models.ForeignKey('TipoParametroDeTarea', models.DO_NOTHING, db_column='ID_TIPO_PARAMETRO_DE_TAREA', blank=True, null=True)
     a_titulo = models.CharField(db_column='A_TITULO', max_length=255, blank=True, null=True)
+    vigente = models.BooleanField(db_column='B_VIGENTE', blank=True, null=True)
+    # FALTA B_ES_SNC
 
     class Meta:
         managed = False
@@ -569,10 +568,10 @@ class ParametroRelacionTarea(models.Model):
         unique_together = (('id_tarea', 'id_param_tarea'),)
 
 
-class Permisos(models.Model):
-    id_permiso = models.BigAutoField(db_column='ID_PERMISO', primary_key=True)
-    a_nombre_permiso = models.CharField(db_column='A_NOMBRE_PERMISO', max_length=250)
-    id_rol = models.ForeignKey('Roles', models.DO_NOTHING, db_column='ID_ROL')
+class Permiso(models.Model):
+    id = models.BigAutoField(db_column='ID_PERMISO', primary_key=True)
+    nombre_permiso = models.CharField(db_column='A_NOMBRE_PERMISO', max_length=250)
+    rol = models.ForeignKey('Roles', models.DO_NOTHING, db_column='ID_ROL')
 
     class Meta:
         managed = False
@@ -602,9 +601,62 @@ class Proceso(models.Model):
     codigo_proceso = models.CharField(db_column='A_CODIGO_PROCESO', max_length=20, blank=True, null=True)
     fecha_creacion = models.DateTimeField(db_column='D_FECHA_CREACION', blank=True, null=True)
 
+    def iniciar(**kwargs):
+        if kwargs.get("nombre"):
+            proceso = Proceso.objects.get(nombre=kwargs.get("nombre"))
+
+        ip = InstanciasDeProcesos(proceso=proceso,
+                                  fecha_inicio=datetime.now(),
+                                  estado_de_proceso_id=2,
+                                  tipo_id=2,
+                                  emisor='fingerhuth',
+                                  unidad_id=11,
+                                  acceso_id=1,
+                                  id_usuario_inicia='fingerhuth'
+                                  )
+        ip.save()
+
+        # temporal
+        usuario = UsuariosRoles.objects.filter(id_usuario='fingerhuth').first()
+        for rol in Roles.objects.all():
+            if UsuariosRoles.objects.filter(id_usuario='fingerhuth', rol=rol).first():
+                continue
+            usuario.id = None
+            usuario.rol = rol
+            usuario.save()
+
+        for responsabilidad in Responsabilidad.objects.all():
+            ur = UsuarioResponsabilidad.objects.get_or_create(responsabilidad=responsabilidad, id_usuario='fingerhuth')[0]
+            ur.n_orden = 1
+            ur.save()
+
+        id = InstanciasDeTareas.objects.all().order_by('-id').first() or 0
+        for tarea in Tarea.objects.filter(proceso=proceso):
+            id += 1
+            it = InstanciasDeTareas(instancia_de_proceso=ip,
+                                    tarea=tarea,
+                                    estado_de_tarea_id=1,
+                                    id=id,
+                                    usuario_que_asigna='fingerhuth',
+                                    fecha_asignacion=datetime.now())
+
+            if tarea.nombre == 'Crear expediente':
+                it.estado_de_tarea_id = 3
+
+            if tarea.nombre == 'Solicitar cometido':
+                it.estado_de_tarea_id = 2
+
+            it.save()
+
+            UsuariosAsignadosATareas.objects.get_or_create(instancia_de_tarea=it, id_usuario='fingerhuth')
+        SeguimientoIntanciaProcesos.objects.get_or_create(id_usuario='fingerhuth', instancia_proceso=ip)
+
+        return ip
+
     class Meta:
         managed = False
         db_table = 'SGDP_PROCESOS'
+        ordering = ['nombre']
 
 
 class ProcesoFormCreaExp(models.Model):
@@ -618,10 +670,10 @@ class ProcesoFormCreaExp(models.Model):
         db_table = 'SGDP_PROCESO_FORM_CREA_EXP'
 
 
-class ReferenciasDeTareas(models.Model):
-    id_referencia_de_tarea = models.BigAutoField(db_column='ID_REFERENCIA_DE_TAREA', primary_key=True)
-    id_tarea = models.ForeignKey('Tarea', models.DO_NOTHING, db_column='ID_TAREA', blank=True, null=True, related_name='tareas')
-    id_tarea_siguiente = models.ForeignKey('Tarea', models.DO_NOTHING, db_column='ID_TAREA_SIGUIENTE', blank=True, null=True, related_name='tareas_siguientes')
+class ReferenciasDeTarea(models.Model):
+    id = models.BigAutoField(db_column='ID_REFERENCIA_DE_TAREA', primary_key=True)
+    tarea = models.ForeignKey('Tarea', models.DO_NOTHING, db_column='ID_TAREA', blank=True, null=True, related_name='tareas')
+    tarea_siguiente = models.ForeignKey('Tarea', models.DO_NOTHING, db_column='ID_TAREA_SIGUIENTE', blank=True, null=True, related_name='tareas_siguientes')
 
     class Meta:
         managed = False
@@ -635,36 +687,59 @@ class Responsabilidad(models.Model):
     class Meta:
         managed = False
         db_table = 'SGDP_RESPONSABILIDAD'
+        ordering = ['nombre']
 
 
 class ResponsabilidadTarea(models.Model):
-    id_responsabilidad = models.ForeignKey(Responsabilidad, models.DO_NOTHING, db_column='ID_RESPONSABILIDAD', primary_key=True)
-    id_tarea = models.ForeignKey('Tarea', models.DO_NOTHING, db_column='ID_TAREA')
+    responsabilidad = models.ForeignKey(Responsabilidad, models.DO_NOTHING, db_column='ID_RESPONSABILIDAD', primary_key=True)
+    tarea = models.ForeignKey('Tarea', models.DO_NOTHING, db_column='ID_TAREA')
 
     class Meta:
         managed = False
         db_table = 'SGDP_RESPONSABILIDAD_TAREA'
-        unique_together = (('id_responsabilidad', 'id_tarea'), ('id_responsabilidad', 'id_tarea'),)
+        unique_together = (('responsabilidad', 'tarea'), ('responsabilidad', 'tarea'),)
 
 
 class Roles(models.Model):
     id = models.BigAutoField(db_column='ID_ROL', primary_key=True)
-    nombre = models.CharField(db_column='A_NOMBRE_ROL', max_length=30)
+    nombre = models.CharField(db_column='A_NOMBRE_ROL', max_length=255)
 
     class Meta:
         managed = False
         db_table = 'SGDP_ROLES'
+        ordering = ['nombre']
+
+    # def save(self, *args, **kwargs):
+    #     # self.sincronizar_con_responsabilidades()
+    #     super(Roles, self).save(*args, **kwargs)
+    #     self.sincronizar_con_responsabilidades_temporal()
+
+    # def sincronizar_con_responsabilidades_temporal(self):
+    #     for rol in Roles.objects.all():
+    #         responsabilidad = Responsabilidad.objects.get_or_create(pk=rol.id)[0]
+    #         responsabilidad.nombre = rol.nombre
+    #         responsabilidad.save()
+
+    # def sincronizar_con_responsabilidades(self):
+    #     if self.id is None:  # Nuevo
+    #         Responsabilidad.objects.get_or_create(nombre=self.nombre)
+
+    #     else:  # Cambio Nombre
+    #         Responsabilidad.objects.filter(nombre=Roles.objects.get(id=self.id).nombre).update(nombre=self.nombre)
 
 
 class SeguimientoIntanciaProcesos(models.Model):
-    id_instancia_proceso = models.ForeignKey(InstanciasDeProcesos, models.DO_NOTHING, db_column='ID_INSTANCIA_PROCESO', primary_key=True)
+    """ 
+    Parece que no se ocupa 
+    """
+    instancia_proceso = models.ForeignKey(InstanciasDeProcesos, models.DO_NOTHING, db_column='ID_INSTANCIA_PROCESO', primary_key=True)
     id_usuario = models.CharField(db_column='ID_USUARIO', max_length=64)
     a_tipo_de_notificacion = models.CharField(db_column='A_TIPO_DE_NOTIFICACION', max_length=255, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'SGDP_SEGUIMIENTO_INTANCIA_PROCESOS'
-        unique_together = (('id_instancia_proceso', 'id_usuario'),)
+        unique_together = (('instancia_proceso', 'id_usuario'),)
 
 
 class SolicitudCreacionExp(models.Model):
@@ -728,6 +803,8 @@ class TareasIniciaProcesos(models.Model):
 
 
 class TareasRoles(models.Model):
+    """ Este modelo no se ocupa """
+
     id_tarea = models.ForeignKey(Tarea, models.DO_NOTHING, db_column='ID_TAREA', primary_key=True)
     id_rol = models.ForeignKey(Roles, models.DO_NOTHING, db_column='ID_ROL')
     n_orden = models.IntegerField(db_column='N_ORDEN', blank=True, null=True)
@@ -791,6 +868,8 @@ class TipoParametroDeTarea(models.Model):
     a_texto_html = models.CharField(db_column='A_TEXTO_HTML', max_length=5000)
     b_comenta = models.BooleanField(db_column='B_COMENTA', blank=True, null=True)
 
+    # faltan varias columnas
+
     class Meta:
         managed = False
         db_table = 'SGDP_TIPO_PARAMETRO_DE_TAREA'
@@ -804,16 +883,17 @@ class Unidades(models.Model):
     class Meta:
         managed = False
         db_table = 'SGDP_UNIDADES'
+        ordering = ['nombre']
 
 
 class UsuariosAsignadosATareas(models.Model):
-    id_instancia_de_tarea = models.ForeignKey(InstanciasDeTareas, models.DO_NOTHING, db_column='ID_INSTANCIA_DE_TAREA', primary_key=True)
+    instancia_de_tarea = models.ForeignKey(InstanciasDeTareas, models.DO_NOTHING, db_column='ID_INSTANCIA_DE_TAREA', primary_key=True)
     id_usuario = models.CharField(db_column='ID_USUARIO', max_length=30)
 
     class Meta:
         managed = False
         db_table = 'SGDP_USUARIOS_ASIGNADOS_A_TAREAS'
-        unique_together = (('id_instancia_de_tarea', 'id_usuario'),)
+        unique_together = (('instancia_de_tarea', 'id_usuario'),)
 
 
 class UsuariosRoles(models.Model):
@@ -846,15 +926,15 @@ class UsuarioNotificacionTarea(models.Model):
 
 class UsuarioResponsabilidad(models.Model):
     id_usuario = models.CharField(db_column='ID_USUARIO', max_length=255)
-    id_responsabilidad = models.ForeignKey(Responsabilidad, models.DO_NOTHING, db_column='ID_RESPONSABILIDAD')
-    id_usuario_responsabilidad = models.BigAutoField(db_column='ID_USUARIO_RESPONSABILIDAD', primary_key=True)
+    responsabilidad = models.ForeignKey(Responsabilidad, models.DO_NOTHING, db_column='ID_RESPONSABILIDAD')
+    usuario = models.BigAutoField(db_column='ID_USUARIO_RESPONSABILIDAD', primary_key=True)
     n_orden = models.IntegerField(db_column='N_ORDEN', blank=True, null=True)
     b_subrogando = models.BooleanField(db_column='B_SUBROGANDO', blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'SGDP_USUARIO_RESPONSABILIDAD'
-        unique_together = (('id_usuario', 'id_responsabilidad'),)
+        unique_together = (('id_usuario', 'responsabilidad'),)
 
 
 class ValorParametroDeTarea(models.Model):

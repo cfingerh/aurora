@@ -25,8 +25,6 @@ cd aurora
 git checkout instalacion
 cd ..
 
-
-
 mkdir ~/repositorios
 cd ~/repositorios
 
@@ -92,8 +90,8 @@ chmod 600 .pgpass
 ###### Modifiar datos iniciales de base de datos y cargar
 
 cd ~
-sed -i "s/192.168.1.92:8080/$URL:8080/g" ~/aurora/Instalacion/sgdp_datos_inicial.sql
-psql -U sgdp -d sgdp -f ~/aurora/Instalacion/sgdp_datos_inicial.sql
+sed -i "s/192.168.1.92:8080/$URL:8080/g" ~/repositorios/aurora/Instalacion/sgdp_datos_inicial.sql
+psql -U sgdp -d sgdp -f ~/repositorios/aurora/Instalacion/sgdp_datos_inicial.sql
 
 
 
@@ -101,7 +99,6 @@ psql -U sgdp -d sgdp -f ~/aurora/Instalacion/sgdp_datos_inicial.sql
 ### Compilar  integracion-client-api
 cd /home/ubuntu/repositorios/integracion-client-api
 mvn install -Dmaven.test.skip=true
-cp /home/ubuntu/repositorios/integracion-client-api/target/integracion-client-api-0.0.1.jar $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/lib
 cd ~
 cd /home/ubuntu/repositorios/SGDP
 mvn install -Dmaven.test.skip=true
@@ -144,19 +141,16 @@ $HOME_ALFRESCO/alfresco.sh start
 
 
 ###### Configurar Alfresco
-
+URL=$(curl ifconfig.me)
 HOME_ALFRESCO=/home/ubuntu/alfresco
 $HOME_ALFRESCO/alfresco.sh start
 
+#UNA DE ESTAS DOS
 cd /home/ubuntu/repositorios/integracion-client-api
 mvn install -Dmaven.test.skip=true
 
-#UNA DE ESTAS DOS
-cp /home/ubuntu/repositorios/integracion-client-api/target/integracion-client-api-0.0.1.jar $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/lib
-
-cp /home/ubuntu/repositorios/integracion-client-api/integracion-client-api-0.0.2.jar $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/lib
+cp /home/ubuntu/repositorios/custom-authentication-repo/custom-authentication-repo-1.0-SNAPSHOT.jar $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/lib
 cd ~
-
 
 echo " 
 authentication.chain=alfinst:alfrescoNtlm,custauth1:customauthenticator,ad1:ldap-ad
@@ -198,6 +192,8 @@ cp /home/ubuntu/repositorios/Web-Scripts-Alfresco-SGDP/*.* $HOME_ALFRESCO/tomcat
 rm -f $HOME_ALFRESCO/alf_data/solr4/index/workspace/SpacesStore/index/*
 rm -f $HOME_ALFRESCO/alf_data/solr4/index/archive/SpacesStore/index/*
 echo http://$URL:8080/solr4/admin/cores?action=FIX 
+http://$URL:8080/alfresco/s/index con post 
+{reset: on,  submit: Refresh Web Scripts}
 
 
 cd $HOME_ALFRESCO/tomcat/webapps/alfresco/WEB-INF/classes/alfresco/extension/templates/webscripts/
@@ -227,7 +223,7 @@ sleep 2m
 URL=$(curl ifconfig.me)
 export URL
 cd ~ 
-python3 aurora/Instalacion/crear_carpetas.py
+python3 repositorios/aurora/Instalacion/crear_carpetas.py
 
 
 # Wildfly
@@ -298,9 +294,7 @@ sudo dpkg-reconfigure slapd
 
 
 
-cd ~
-cd aurora
-cd Instalacion
+cd ~/repositorios/aurora/Instalacion
 ldapadd -x -D cn=admin,dc=app,dc=local -f ldap_data.ldif -w gest1469
 
 # No se si sea necesario
@@ -315,7 +309,7 @@ echo http://$URL/lam/templates/login.php
 # Account Typese -> LDAP suffice -> dc=app,dc=local
 # Primer Crear un Group
 # tuve que ir a module settings y apreta save... pq o si no aparece error
-ldapwhoami -vvv -h localhost -p 389 -D 'cn=cfingerhuth,dc=app,dc=local' -x -w gest1469
+ldapwhoami -vvv -h localhost -p 389 -D 'cn=fingerhuth,dc=app,dc=local' -x -w gest1469
 
 
 #### FALTA
@@ -323,11 +317,14 @@ psql -d sgdp -U sgdp
 INSERT INTO "SGDP_USUARIOS_ROLES" ("ID_ROL", "ID_USUARIO", "ID_UNIDAD") VALUES (2,'fingerhuth',3);
 update "SGDP_USUARIOS_ROLES" set "B_ACTIVO"  = true, "A_NOMBRE_COMPLETO" ='Christian Fingerhuth', "A_RUT" ='1396', "B_FUERA_DE_OFICINA" =false , "ID_USUARIO" ='fingerhuth';
 
+
+#NO ocupar esto, sino que el archivo que eestá en Instalación
 # despues de modificar esto hay que compilar
-sudo sed -i 's/cn=ldapadm,dc=app,dc=local/cn=admin,dc=app,dc=local/g' $FUENTESERV/SGDP/src/cl/gob/scj/sgdp/config/security-context.xml
-sudo sed -i 's/Tecn2020/gest1469/g' $FUENTESERV/SGDP/src/cl/gob/scj/sgdp/config/security-context.xml
+sudo sed -i 's/cn=ldapadm,dc=app,dc=local/cn=admin,dc=app,dc=local/g' /home/ubuntu/repositorios/SGDP/src/cl/gob/scj/sgdp/config/security-context.xml
+sudo sed -i 's/Tecn2020/gest1469/g' /home/ubuntu/repositorios/SGDP/src/cl/gob/scj/sgdp/config/security-context.xml
 
 # o
+vim /home/ubuntu/repositorios/SGDP/src/cl/gob/scj/sgdp/config/security-context.xml
 
 <constructor-arg value="ldap://localhost/dc=app,dc=local"></constructor-arg>
 <property name="userDn" value="cn=admin,dc=app,dc=local"></property>
@@ -368,12 +365,22 @@ mvn install -Dmaven.test.skip=true
 vim  /home/ubuntu/repositorios/SGDP/pom.xml
 y cambiar client-api a version 0.0.1
 
+cp /home/ubuntu/repositorios/integracion-client-api/integracion-client-api-0.0.2.jar ~/.m2/repository/cl/gob/scj/integracion-client-api/0.0.2
+
 cd /home/ubuntu/repositorios/SGDP
 mvn clean install -Dmaven.test.skip=true
 sudo bash /opt/wildfly/bin/jboss-cli.sh --connect --controller=127.0.0.1:10000 --command="deploy --force /home/ubuntu/repositorios/SGDP/target/sgdp-0.0.1-SNAPSHOT.war "
-
 sudo systemctl restart wildfly
 echo http://$URL:8090/sgdp
+
+
+# Desactiva el login normal y funciona el autenticador propio
+echo " 
+authentication.chain=alfinst:alfrescoNtlm,custauth1:customauthenticator,ad1:ldap-ad
+ntlm.authentication.sso.enabled=false
+" >> /home/ubuntu/alfresco/tomcat/shared/classes/alfresco-global.properties
+$HOME_ALFRESCO/alfresco.sh stop
+$HOME_ALFRESCO/alfresco.sh start
 
 
 # Camunda
@@ -382,7 +389,33 @@ cd ~
 sudo apt install php-pgsql -y
 sudo apt-get install php libapache2-mod-php -y
 
-sudo cp -R $FUENTESERV/sgdp-carga-subProcesos/sgdoc /var/www/html/
+sudo cp -R repositorios/sgdp-carga-subProcesos/sgdoc /var/www/html/
 
 sudo systemctl restart apache2
 echo http://$URL/sgdoc/proceso/bpm/asig_user.php
+
+
+sudo sed -i 's/172.16.10.61/localhost/g' /var/www/html/sgdoc/proceso/bpm/connect.php
+sudo sed -i 's/S4cc84cJ/alfresco/g' /var/www/html/sgdoc/proceso/bpm/connect.php
+sudo sed -i 's/Error al /Error 1 al/g' /var/www/html/sgdoc/proceso/bpm/connect.php
+
+
+### También hay que cambiar /var/www/html/sgdoc/proceso/bpm/connect.php
+
+
+sudo sed -i 's/172.16.10.61/localhost/g' /var/www/html/sgdoc/proceso/bpm/logica/connect.php
+sudo sed -i 's/S4cc84cJ/alfresco/g' /var/www/html/sgdoc/proceso/bpm/logica/connect.php
+sudo sed -i 's/Error al /Error 2 al/g' /var/www/html/sgdoc/proceso/bpm/logica/connect.php
+
+sudo sed -i 's/scjedb.supercasino.cl/localhost/g' /var/www/html/sgdoc/logica/connect.php
+sudo sed -i 's/postgresSCJ/gest1469/g' /var/www/html/sgdoc/logica/connect.php
+sudo sed -i 's/usuario_postgres/sgdp/g' /var/www/html/sgdoc/logica/connect.php
+sudo sed -i 's/5444/5432/g' /var/www/html/sgdoc/logica/connect.php
+sudo sed -i 's/sgdoc/sgdp/g' /var/www/html/sgdoc/logica/connect.php
+sudo sed -i 's/Error al /Error 3 al/g' /var/www/html/sgdoc/logica/connect.php
+
+
+sudo systemctl restart apache2
+
+
+http://54.207.252.22/sgdoc/proceso/bpm/asig_user.php

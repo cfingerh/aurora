@@ -23,6 +23,9 @@
                 <li class="nav-item">
                     <a href="#" class="" @click="get_link('Procesos')" v-bind:class="[$route.name === 'Procesos' ? 'nav-link--active': 'nav-link']">Procesos<i class="fa fa-chevron-right"></i></a>
                 </li>
+                <li class="nav-item">
+                    <a href="#" class="" @click="get_link('Parametros')" v-bind:class="[$route.name === 'Parametros' ? 'nav-link--active': 'nav-link']">Parámetros<i class="fa fa-chevron-right"></i></a>
+                </li>
             </ul>
             <hr>
       </div>

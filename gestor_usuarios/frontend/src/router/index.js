@@ -8,6 +8,7 @@ import Macroprocesos from '../views/Macroprocesos.vue'
 import Responsabilidades from '../views/Responsabilidades.vue'
 import Procesos from '../views/Procesos.vue'
 import Etapas from '../views/Etapas.vue'
+import Parametros from '../views/Parametros.vue'
 
 import axios from 'axios'
 
@@ -23,6 +24,7 @@ const routes = [
   { path: '/macroprocesos/', name: 'Macroprocesos', component: Macroprocesos, meta: { noAuth: true } },
   { path: '/responsabilidades/', name: 'Responsabilidades', component: Responsabilidades, meta: { noAuth: true } },
   { path: '/procesos/', name: 'Procesos', component: Procesos, meta: { noAuth: true } },
+  { path: '/parametros/', name: 'Parametros', component: Parametros, meta: { noAuth: true } },
   { path: '/etapas/', name: 'Etapas', component: Etapas, meta: { noAuth: true } }
 
 ]
