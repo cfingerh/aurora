@@ -34,12 +34,14 @@ resp = ses.post(url_crear_carpeta, json=data)
 scj_ws= json.loads(resp.text).get("persistedObject")
 
 # Permisos
-url = '{}/proxy/alfresco/slingshot/doclib/permissions/workspace/SpacesStore/{}'.format(URL, scj_ws.split("/")[-1])
+url_permisos = '{}/proxy/alfresco/slingshot/doclib/permissions/workspace/SpacesStore/{}'.format(URL, scj_ws.split("/")[-1])
 data = {
     "permissions":
 [{"authority":"GROUP_EVERYONE","role":"Collaborator"}],
 "isInherited":False
 }
+
+resp = ses.post(url_permisos, json=data)
 
 data =  {
     "alf_destination":scj_ws,
