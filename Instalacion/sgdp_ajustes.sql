@@ -1,0 +1,10 @@
+alter table sgdp."SGDP_HISTORICO_DE_INST_DE_TAREAS"
+add column "N_DIAS_OCUPADOS" int2 ;
+
+alter table sgdp."SGDP_HISTORICO_DE_INST_DE_TAREAS"
+add column "N_HORAS_OCUPADAS" int2 ;
+
+alter table sgdp."SGDP_HISTORICO_DE_INST_DE_TAREAS"
+add column "N_MINUTOS_OCUPADOS" int2 ;
+
+ALTER TABLE sgdp."SGDP_PROCESOS" ADD "B_TIENE_PARAM_POR_TAREA" bool NULL DEFAULT false;
